@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import jwt from 'jsonwebtoken'
 import Cookie from 'js-cookie'
-
+import Head from 'next/head'
+import Router from 'next/router'
 export default function Home() {
   const [username,setUsername]=useState('')
   const [password,setPassword]=useState('')
@@ -23,11 +24,15 @@ export default function Home() {
     }else{
       setMessage('Invalid Credentials')
     }
-    alert(Cookie.get("_wsp"));
+    
   }
-
+if(!Cookie.get("_wsp")){
   return (
     <div>
+      <Head>
+        <title>Login</title>
+        <meta name='keywords' content='web development, programming'/>
+      </Head>
       <h1>{message}</h1>
       {/* <h2>{Cookie.get("_wsp")}</h2> */}
       <form>
@@ -37,4 +42,21 @@ export default function Home() {
       </form>
     </div>
   )
+}else{
+  function logout(){
+     Cookie.remove("_wsp") 
+     Router.reload();
+  }
+  return (
+    <div>
+      <Head>
+        <title>Hello User</title>
+        <meta name='keywords' content='web development, programming'/>
+      </Head>
+      <h1>You have logged in</h1>
+      <input type="button" value="Logout" onClick={logout} />
+    </div>
+  )
+}
+  
 }
